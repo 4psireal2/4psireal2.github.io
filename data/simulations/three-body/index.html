@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Three-body simulator</title>
+    <link rel="stylesheet" href="/config/site.css">
+  </head>
+  <body>
+    <style>
+       body { font-size: 100%; font-family: monospace;}
+       .mtable table td tr { display: block; border-collapse: collapse;}
+       .mtable td { vertical-align: top; }
+       input { width: 180px; font-size: 100%; }
+       .error { color: red; font-size: 75%; }
+       .potential { width: 250px; }
+       .controls td { padding-left: 10px; padding-right: 10px;}
+       table.controls { border-radius: 8px; background: #c2c2c2;}
+       p.status { font-size: 100%; }
+       p.observables { font-size: 100%;}
+    </style>
+    <table class="mtable" style="width: 100%; max-width: 1024px;">
+      <tbody>
+	<tr>
+	  <td id="parent" style="width: 60%;">
+	    <p id="status" class="status">Loading Pyodide...</p>  
+	    <canvas id="canvas" style="width: 100%;"></canvas>
+	    <table class="controls">
+	      <tr>
+		<td>x<sub>0</sub></td>
+		<td>x<sub>1</sub></td>
+		<td>x<sub>2</sub></td>
+	      </tr>
+	      <tr>
+		<td><input id="x0" value="-1.5" ></td>
+		<td><input id="x1" value="0" ></td>
+		<td><input id="x2" value="2.0" ></td>
+	      </tr>
+	      <tr>
+		<td><p class="error" id="errorx0"></p></td>
+		<td><p class="error" id="errorx1"></p></td>
+		<td><p class="error" id="errorx2"></p></td>
+              </tr>
+	    </table>
+	  </td>
+	  <td style="width: 100%;">
+	    <table>
+	      <tr>
+		<td>
+                  <p class="observables" id="angular_mom">
+		</td>
+	      </tr>
+	    </table>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+      <script type="text/javascript">
+      async function main() {
+        let pyodide = await loadPyodide();
+      await pyodide.loadPackage(["numpy", "scipy"]);
+      pyodide.runPython(await (await fetch("threebody.py")).text());
+      }
+      main();
+    </script>
+  </body>
+</html>
