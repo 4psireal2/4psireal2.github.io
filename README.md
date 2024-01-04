@@ -2,4 +2,5 @@
 - Run `python -m http.server`
 - Go to `http://localhost:8000`
 ## TODO
-- []: squash commits!!
+- [x]: squash commits!!
+- []: transfer css styles in simulation HTML scripts to site.css

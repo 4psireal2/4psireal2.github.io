@@ -13,17 +13,18 @@
         <li>Filter shape: Soft</li>
         <li>Mode: WFM(mono)</li>
         <li>Automatic gain control (AGC): Fast</li>
-        <li>Squelch: A R </li>
-        <li>Noise blanker: </li>
+        <li>Squelch: A <i>(for a fixed frequency)</i></li>
+        <li>Noise blanker: NB1 - standard, NB2 - enhanced</li>
     </ul>
     <ul> <i>Input controls</i>
-        <li>LNB LO: Narrow</li>
-        <li>Freq. correction: Soft</li>
-        <li>Hardware AGC: </li>
-        <li>Swap IQ: </li>
-        <li>No limits: </li>
-        <li>IQ balance: </li>
-        <li>DC remove: </li>
+        <li>LNB LO: 0 MHz <i>(<span>&#8800;</span>0 if an up/down converter is present)</i></li>
+        <li>Freq. corr.: Soft <i>(if <span>&#8707</span> a drift/error in SDR's oscillator)*</i></li>
+        <li>Hardware AGC: Checked?</li>
+        <li>Swap IQ: Off</li>
+        <li>Antenna: Off</li>
+        <li>No limits: Off <i>(for use of SDR beyond its frequency domain)</i></li>
+        <li>IQ balance: Should be balanced and in phase?</li>
+        <li>DC remove: Checked  <i>(remove DC bias in direct conversion receivers)</i></li>
     </ul>
     <ul> <i>FFT settings</i>
         <li>FFT size: RBW</li>
@@ -50,5 +51,11 @@
         <li>Hosts:</li>
         <li>TCP: </li>
     </ul>
+    <ul> <i>Waterfall display and spectrum analyzer</i>
+      <li>Audio frame: spectrum of the demodulated signal</li>
+      <li>Hosts:</li>
+      <li>TCP: </li>
+  </ul>
+  *: try tuning to the nominal frequency of the carrier of a very well known station or to the frequency of a reference generator. In general, keep track of SDR's ppm.
   </body>
 </html>
