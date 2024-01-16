@@ -1,3 +1,6 @@
+"""
+HTML and Pyodide related sections are borrowed from Hendrik Weimer
+"""
 from js import window, document, console
 from pyodide.ffi import create_proxy
 
