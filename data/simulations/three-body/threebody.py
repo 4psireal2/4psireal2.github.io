@@ -104,8 +104,12 @@ def replot_canvas():
     L2 = float(np.cross(x[2, :], p[2, :]))
     L_tot = L0 + L1 + L2
 
+    COM = np.sum(globals['m']) * (globals['m'][0] * x[0, :] + 
+                                  globals['m'][1] * x[1, :] +
+                                  globals['m'][2] * x[2, :])
+
     angular_mom = document.getElementById("angular_mom")
-    s = f"L0 = {L0:.6f}Ẑ<br>L1 = {L1:.6f}Ẑ<br>L2 = {L2:.6f}Ẑ<br>L_tot = {L_tot:.6f}Ẑ<br><br>E = {E():.6f}"
+    s = f"L0 = {L0:.6f}Ẑ<br>L1 = {L1:.6f}Ẑ<br>L2 = {L2:.6f}Ẑ<br>L_tot = {L_tot:.6f}Ẑ<br><br>E = {E():.6f}<br> COM = {COM[0]:.6f}X̂,  {COM[1]:.6f}Ŷ"
     angular_mom.innerHTML = s
 
 
