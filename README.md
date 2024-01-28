@@ -4,3 +4,4 @@
 ## TODO
 - [x]: squash commits!!
 - []: transfer css styles in simulation HTML scripts to site.css
+- []: Add center of mass calculation
