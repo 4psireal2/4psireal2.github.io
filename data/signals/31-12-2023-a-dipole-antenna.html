@@ -12,14 +12,14 @@
         <li>Filter width: Narrow</li>
         <li>Filter shape: Soft</li>
         <li>Mode: WFM(mono)</li>
-        <li>Automatic gain control (AGC): Fast</li>
-        <li>Squelch: A <i>(for a fixed frequency)</i></li>
+        <li>Automatic gain control (AGC): Fast/Medium</li>
+        <li>Squelch: -150.0 dB [A] <i>(for a fixed frequency)</i></li>
         <li>Noise blanker: NB1 - standard, NB2 - enhanced</li>
     </ul>
     <ul> <i>Input controls</i>
         <li>LNB LO: 0 MHz <i>(<span>&#8800;</span>0 if an up/down converter is present)</i></li>
         <li>Freq. corr.: Soft <i>(if <span>&#8707</span> a drift/error in SDR's oscillator)*</i></li>
-        <li>Hardware AGC: Checked?</li>
+        <li>Hardware AGC: Checked? -> LNA fixed if AGC is present</li> 
         <li>Swap IQ: Off</li>
         <li>Antenna: Off</li>
         <li>No limits: Off <i>(for use of SDR beyond its frequency domain)</i></li>
@@ -29,8 +29,9 @@
     <ul> <i>FFT settings</i>
         <li>FFT size: 8192; RBW: 250 Hz -> 30.5 Hz/FFT bins</li>
         <li>Rate: 25 fps, Overlap: 0%</li>
-        <li>Time span: Res: 0.07s </li>
+        <li>Time span: Auto, Res: 0.07s </li>
         <li>Window: Hann</li>
+        <li>Averaging: ~75%
         <li>Reset: 100% default value - Center: center around original frequency - Demod: center around demodulator frequency</li>
     </ul>
     <ul> <i>DSP audio settings</i>
