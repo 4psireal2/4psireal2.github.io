@@ -14,7 +14,7 @@ proxy = dict()
 globals = dict()
 
 globals['N'] = 3
-globals['m'] = np.array([1, 2, 1])
+globals['m'] = np.array([2, 2, 2])
 globals['x'] = np.zeros((globals['N'], 2))
 globals['p'] = np.zeros((globals['N'], 2))
 
@@ -161,10 +161,8 @@ def init_ode(foo=0):
             error.innerHTML = "Input error"
             status.innerHTML = ""
             exit_code = 1
-
-    globals['p'][0][1] = 1
-    globals['p'][1][1] = 0
-    globals['p'][2][1] = -1
+    
+    globals['x'][2][1] = 2*np.sqrt(3)
 
     if exit_code == 0:
         console.log("setting timer")
