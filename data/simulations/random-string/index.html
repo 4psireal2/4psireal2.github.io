@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaussian Random String Generator</title>
+    <script>
+        function gaussianRandom(mean, stdDev) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+            return Math.round(num * stdDev + mean);
+        }
+
+        function generateString() {
+            const adjectives = ["quick", "lazy", "happy", "sad", "bright", "dark", "fast", "slow"];
+            const nouns = ["fox", "dog", "car", "tree", "house", "river", "mountain", "ocean"];
+            const verbs = ["runs", "jumps", "flies", "sleeps", "eats", "reads", "writes", "sings"];
+            
+            const allWords = [...adjectives, ...nouns, ...verbs];
+
+            let meanLength = 6; // Average number of words
+            let stdDev = 2; // Standard deviation
+
+            let wordCount = Math.max(1, gaussianRandom(meanLength, stdDev)); // Ensure at least 1 word
+            
+            let result = [];
+            for (let i = 0; i < wordCount; i++) {
+                let randomIndex = Math.floor(Math.random() * allWords.length);
+                result.push(allWords[randomIndex]);
+            }
+
+            document.getElementById("output").innerText = result.join(" ");
+        }
+    </script>
+</head>
+<body>
+    <h2>Gaussian Random String Generator</h2>
+    <button onclick="generateString()">Generate String</button>
+    <p id="output"></p>
+</body>
+</html>
