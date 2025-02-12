@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Gaussian Random String Generator</title>
-    <link rel="stylesheet" href="../../config/site.css">
+    <link rel="stylesheet" href="/config/site.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script>
@@ -992,10 +992,13 @@
             let result = [];
             for (let i = 0; i < 4; i++) {
                 let randomIndex = Math.floor(Math.random() * allWords.length);
-                result.push(allWords[randomIndex]);
+                let randomWord = allWords[randomIndex];
+                let wordEntropy = Math.log2(randomWord.length);
+                
+                result.push(`${randomWord} - Your word is this disorder: ${wordEntropy.toFixed(2)}`);
             }
 
-            document.getElementById("output").innerText = result.join("");
+            document.getElementById("output").innerText = result;
         }
     </script>
 </head>
