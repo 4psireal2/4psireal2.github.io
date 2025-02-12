@@ -990,16 +990,19 @@
             const allWords = [..._ADJECTIVE_, ..._PLURALNOUN_, ..._VERB_, ..._ADVERB_];
             
             let result = [];
+            let combinedWord = "";
             for (let i = 0; i < 4; i++) {
                 let randomIndex = Math.floor(Math.random() * allWords.length);
                 let randomWord = allWords[randomIndex];
-                let wordEntropy = Math.log2(randomWord.length);
-                
-                result.push(`${randomWord} - Your word is this disorder: ${wordEntropy.toFixed(2)}`);
+                combinedWord += randomWord;
+
             }
 
-            document.getElementById("output").innerText = result;
-        }
+            let wordEntropy = Math.log2(combinedWord.length);
+
+            document.getElementById("output").innerText = 
+                `Your word ${combinedWord} is this disorder: ${wordEntropy.toFixed(13)}\n
+                What does that say about you, dear?`;}
     </script>
 </head>
 <body>
