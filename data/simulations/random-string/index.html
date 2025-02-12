@@ -1001,12 +1001,12 @@
             let wordEntropy = Math.log2(combinedWord.length);
 
             document.getElementById("output").innerText = 
-                `Your word ${combinedWord} is this disorder: ${wordEntropy.toFixed(13)}\n
+                `Your word ${combinedWord} is this much disorder/abnormal: ${wordEntropy.toFixed(13)}\n
                 What does that say about you, dear?`;}
     </script>
 </head>
 <body>
-    <h2>Gaussian Random String Generator</h2>
+    <h2>Normal Random String Generator</h2>
     <button onclick="generateString()" style="font-family: monospace;">Generate String</button>
     <p id="output"></p>
 </body>
