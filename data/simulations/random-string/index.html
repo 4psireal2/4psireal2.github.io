@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gaussian Random String Generator</title>
+    <title>Normal Random String Generator</title>
     <link rel="stylesheet" href="/config/site.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script>
-        function gaussianRandom(mean, stdDev) {
+        function gaussianRandom(mean = 0, stdDev = 1) {
             let u = 0, v = 0;
             while (u === 0) u = Math.random();
             while (v === 0) v = Math.random();
@@ -991,9 +991,13 @@
             
             let result = [];
             let combinedWord = "";
+            let meanIndex = allWords.length / 2; // Center of distribution
+            let stdDevIndex = allWords.length / 6; // Spread of distribution
             for (let i = 0; i < 4; i++) {
-                let randomIndex = Math.floor(gaussianRandom(0, 1) * allWords.length);
-                let randomWord = allWords[randomIndex];
+                let normalIndex = Math.round(gaussianRandom(meanIndex, stdDevIndex));
+                normalIndex = Math.max(0, Math.min(allWords.length - 1, normalIndex)); // Keep index in bounds
+                
+                let randomWord = allWords[normalIndex];
                 combinedWord += randomWord;
 
             }
