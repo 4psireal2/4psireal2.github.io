@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Will we ever meet again in Flatland?</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    /* Styles for grid lines */
+    .grid line {
+      stroke: lightgray;
+      stroke-opacity: 0.7;
+      shape-rendering: crispEdges;
+    }
+    .grid path {
+      stroke-width: 0;
+    }
+  </style>
+    <link rel="stylesheet" href="/config/site.css">
+</head>
+<body>
+  <div id="controls">
+    <button id="run">Run</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+  </div>
+  
+  <div id="chart"></div>
+  
+  <script>
+    /*********************
+     * GLOBAL VARIABLES  *
+     *********************/
+    // Simulation state variables
+    let redPoints = [{ x: 0, y: 0 }];
+    let greenPoints = [{ x: 0, y: 0 }];
+    let redX = 0, redY = 0;
+    let greenX = 0, greenY = 0;
+    // Initial domain: using a symmetric bound (both axes)
+    const initialBound = 15;
+    let currentBound = initialBound;
+    
+    // Interval handle
+    let simulationInterval = null;
+    
+    // SVG dimensions and margins
+    const margin = { top: 20, right: 20, bottom: 30, left: 40 },
+          width = 800 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom;
+    
+    // Append the SVG element and group element
+    const svg = d3.select("#chart")
+                  .append("svg")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                  .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    // Groups for grid and axes
+    const gridGroup = svg.append("g").attr("class", "grid");
+    const xAxisGroup = svg.append("g")
+                          .attr("class", "x-axis")
+                          .attr("transform", `translate(0, ${height})`);
+    const yAxisGroup = svg.append("g")
+                          .attr("class", "y-axis");
+    
+    // Paths for the random walks
+    const redPathLine = svg.append("path")
+                           .attr("fill", "none")
+                           .attr("stroke", "steelblue")
+                           .attr("stroke-width", 2);
+    const greenPathLine = svg.append("path")
+                             .attr("fill", "none")
+                             .attr("stroke", "orange")
+                             .attr("stroke-width", 2);
+    
+    // Markers for current positions
+    const redMarker = svg.append("circle")
+                         .attr("r", 5)
+                         .attr("fill", "red");
+    const greenMarker = svg.append("circle")
+                           .attr("r", 5)
+                           .attr("fill", "green");
+    
+    // Create scales for x and y (will share a common domain)
+    let xScale = d3.scaleLinear().range([0, width]).domain([-currentBound, currentBound]);
+    let yScale = d3.scaleLinear().range([height, 0]).domain([-currentBound, currentBound]);
+    
+    /*********************
+     * FUNCTIONS         *
+     *********************/
+    
+    // Update grid lines and axes
+    function updateAxesAndGrid() {
+      gridGroup.selectAll("*").remove();
+      gridGroup.append("g")
+        .attr("class", "x-grid")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(xScale)
+                .ticks(10)
+                .tickSize(-height)
+                .tickFormat(""));
+      gridGroup.append("g")
+        .attr("class", "y-grid")
+        .call(d3.axisLeft(yScale)
+                .ticks(10)
+                .tickSize(-width)
+                .tickFormat(""));
+    
+      //const xAxis = d3.axisBottom(xScale);
+      //const yAxis = d3.axisLeft(yScale);
+      //xAxisGroup.transition().duration(200).call(xAxis);
+      //yAxisGroup.transition().duration(200).call(yAxis);
+    }
+    
+    // Update the path, marker, etc.
+    function updateChart() {
+      // Check if current position is outside the current domain.
+      // Since scales are symmetric, we use xScale.domain() which gives [-currentBound, currentBound]
+      let domain = xScale.domain();
+      if (
+         redX < domain[0] || redX > domain[1] ||
+         redY < domain[0] || redY > domain[1] ||
+         greenX < domain[0] || greenX > domain[1] ||
+         greenY < domain[0] || greenY > domain[1]
+      ) {
+        // Double the bound.
+        currentBound *= 2;
+        xScale.domain([-currentBound, currentBound]);
+        yScale.domain([-currentBound, currentBound]);
+        updateAxesAndGrid();
+      }
+      
+      // Update the random walk paths.
+      const lineGenerator = d3.line()
+                              .x(d => xScale(d.x))
+                              .y(d => yScale(d.y));
+      redPathLine.datum(redPoints)
+                 .transition()
+                 .duration(200)
+                 .attr("d", lineGenerator);
+      greenPathLine.datum(greenPoints)
+                   .transition()
+                   .duration(200)
+                   .attr("d", lineGenerator);
+      
+      // Update the walker markers.
+      redMarker.transition()
+               .duration(200)
+               .attr("cx", xScale(redX))
+               .attr("cy", yScale(redY));
+      greenMarker.transition()
+                 .duration(200)
+                 .attr("cx", xScale(greenX))
+                 .attr("cy", yScale(greenY));
+    }
+    
+    function getRandomStep() {
+      const stepOptions = [
+        { dx: 1, dy: 0 },
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 }
+      ];
+      return stepOptions[Math.floor(Math.random() * stepOptions.length)];
+    }
+    
+    // Take one step for each random walker.
+    function takeStep() {
+      const redStep = getRandomStep();
+      const greenStep = getRandomStep();
+      
+      redX += redStep.dx;
+      redY += redStep.dy;
+      greenX += greenStep.dx;
+      greenY += greenStep.dy;
+      redPoints.push({ x: redX, y: redY });
+      greenPoints.push({ x: greenX, y: greenY });
+      updateChart();
+    }
+    
+    // Run the simulation at a fixed interval.
+    function runSimulation() {
+      if (!simulationInterval) {
+        simulationInterval = setInterval(takeStep, 200);
+      }
+    }
+    
+    // Stop the simulation without clearing the current path.
+    function stopSimulation() {
+      clearInterval(simulationInterval);
+      simulationInterval = null;
+    }
+    
+    // Reset the simulation (clear points, reset marker, domain, etc.)
+    function resetSimulation() {
+      clearInterval(simulationInterval);
+      simulationInterval = null;
+      redX = 0;
+      redY = 0;
+      greenX = 0;
+      greenY = 0;
+      redPoints = [{ x: 0, y: 0 }];
+      greenPoints = [{ x: 0, y: 0 }];
+      currentBound = initialBound;
+      xScale.domain([-currentBound, currentBound]);
+      yScale.domain([-currentBound, currentBound]);
+      updateAxesAndGrid();
+      updateChart();
+    }
+    
+    /*********************
+     * INITIALIZATION    *
+     *********************/
+    // Set up initial grid and axes.
+    updateAxesAndGrid();
+    updateChart();
+    
+    // Event listeners
+    document.getElementById("run").addEventListener("click", runSimulation);
+    document.getElementById("stop").addEventListener("click", stopSimulation);
+    document.getElementById("reset").addEventListener("click", resetSimulation);
+  </script>
+</body>
+</html>
